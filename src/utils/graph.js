@@ -82,6 +82,16 @@ export const buildGraph = () => {
   const PrabhadeviWesternLineId = findByNameAndLine('Prabhadevi', 'Western Line');
   if (ParelCentralLineId && PrabhadeviWesternLineId) addUndirectedEdge(ParelCentralLineId, PrabhadeviWesternLineId, 5);
 
+  const lowerParelWesternLineId = findByNameAndLine('Lower Parel', 'Western Line');
+  const curreyRoadCentralLineId = findByNameAndLine('Currey Road', 'Central Line');
+  const lowerParelMonorailId = findByNameAndLine('Lower Parel Monorail', 'Mumbai Monorail');
+
+  if (lowerParelWesternLineId && curreyRoadCentralLineId) addUndirectedEdge(lowerParelWesternLineId, curreyRoadCentralLineId, 7);
+  if (lowerParelMonorailId && curreyRoadCentralLineId) addUndirectedEdge(lowerParelMonorailId, curreyRoadCentralLineId, 5);
+  if (lowerParelMonorailId && lowerParelWesternLineId) addUndirectedEdge(lowerParelMonorailId, lowerParelWesternLineId, 8);
+  
+  
+
   // Auto-detect interchanges by station name across different lines
   const nameToNodeIds = new Map();
   for (const station of allStations) {

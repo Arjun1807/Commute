@@ -719,6 +719,116 @@ export const westernRailwayStations = [
 // Get coordinates array for drawing the line
 export const westernLineCoordinates = westernRailwayStations.map(station => station.coordinates);
 
+export const monorailStations = [
+  {
+    id: 1,
+    name: "Chembur",
+    coordinates: [19.06124782882847, 72.89751927533082],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 2,
+    name: "VNP and RC Marg Junction",
+    coordinates: [19.05266142568508, 72.89422750277076],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 3,
+    name: "Fertilizer Township",
+    coordinates: [19.043927425427427, 72.89344268394865],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 4,
+    name: "Bharat Petroleum",
+    coordinates: [19.035382086697513, 72.8955177071051],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 5,
+    name: " Mysore Colony",
+    coordinates: [19.027715783962947, 72.8913336454702],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 6,
+    name: "Bhakti Park",
+    coordinates: [19.02900090345829, 72.87763011135779],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 7,
+    name: "Wadala Depot",
+    coordinates: [19.038898154588193, 72.87401702751806],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 8,
+    name: "GTB Nagar",
+    coordinates: [19.036752567565895, 72.8708322995191],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 9,
+    name: "Antop Hill",
+    coordinates: [19.030257364135025, 72.86698004854509],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 10,
+    name: "Acharya Atre Nagar",
+    coordinates: [19.02391285477393, 72.863876073683],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 11,
+    name: "Wadala Bridge",
+    coordinates: [19.017518728502367, 72.8593789515127],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 12,
+    name: "Dadar East",
+    coordinates: [19.016210959734615, 72.85229901529665],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 13,
+    name: "Naigaon",
+    coordinates: [19.009618477921602, 72.84790901468239],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 14,
+    name: "Ambedkar Nagar",
+    coordinates: [19.001625293419455, 72.84419384984331],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 15,
+    name: "Mint Colony",
+    coordinates: [18.994534360868766, 72.84330859192974],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 16,
+    name: "Lower Parel Monorail",
+    coordinates: [18.993203101240166, 72.83149128426928],
+    line: "Mumbai Monorail"
+  },
+  {
+    id: 17,
+    name: "Sant Gadge Maharaj Chowk",
+    coordinates: [18.98317248433001, 72.82862242060163],
+    line: "Mumbai Monorail"
+  } 
+];
+
+// Get coordinates array for drawing the line
+export const monorailLineCoordinates = monorailStations.map(station => station.coordinates);
+
+
+
 // Transit line colors
 export const transitColors = {
   blue: '#0066CC',
@@ -727,6 +837,7 @@ export const transitColors = {
   turquoise: '#00C9C9',
   yellow: '#FFCC00',
   purple: '#6600CC',
+  orange: '#FF6600',
 };
 
 // Unified lines descriptor to allow adding new lines only here
@@ -760,6 +871,11 @@ export const transitLines = [
     label: 'Western Line',
     color: transitColors.purple,
     stations: westernRailwayStations,
+  },
+  {
+    label: 'Mumbai Monorail',
+    color: transitColors.orange,
+    stations: monorailStations,
   },
 ];
 
