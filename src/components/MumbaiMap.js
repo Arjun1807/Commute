@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, useMap, Marker, Popup, Polyline, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, Marker, Popup, Polyline, Tooltip, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-polylinedecorator';
 import { transitLines, transitLineCoordinates, transitColors } from '../data/linesData';
@@ -359,62 +359,83 @@ function MapController() {
   return null;
 }
 
+// Helper function to create unique station identifier
+const getStationKey = (station) => `${station.line}-${station.id}`;
+
+// Helper function to find station by key
+const findStationByKey = (allStations, key) => {
+  return allStations.find(s => getStationKey(s) === key);
+};
+
 // Component for station selection UI
 function StationSelector({ allStations, sourceStation, destinationStation, onSourceChange, onDestinationChange, onGetRoute }) {
+  const sourceKey = sourceStation ? getStationKey(sourceStation) : '';
+  const destinationKey = destinationStation ? getStationKey(destinationStation) : '';
+
   return (
-    <div className="station-selector">
-      <div style={{ fontWeight: 'bold', marginBottom: '10px', fontSize: '14px' }}>
+    <div className="station-selector-card">
+      <div style={{ fontWeight: 'bold', marginBottom: '15px', fontSize: '16px', color: '#333' }}>
         Plan Your Journey
       </div>
       
-      <div style={{ marginBottom: '10px' }}>
-        <label style={{ fontSize: '12px', fontWeight: 'bold', display: 'block', marginBottom: '3px' }}>
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '6px', color: '#555' }}>
           From (Source):
         </label>
         <select 
-          value={sourceStation?.id || ''} 
+          value={sourceKey} 
           onChange={(e) => {
-            const station = allStations.find(s => s.id === parseInt(e.target.value));
+            const station = findStationByKey(allStations, e.target.value);
             onSourceChange(station);
           }}
           style={{ 
-            fontSize: '11px', 
-            padding: '4px 6px',
-            border: '1px solid #ccc',
-            borderRadius: '3px',
-            width: '100%'
+            fontSize: '13px', 
+            padding: '8px 10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            width: '100%',
+            backgroundColor: '#fff',
+            cursor: 'pointer',
+            transition: 'border-color 0.2s',
           }}
+          onFocus={(e) => e.target.style.borderColor = '#0066CC'}
+          onBlur={(e) => e.target.style.borderColor = '#ddd'}
         >
           <option value="">Select Source Station</option>
           {allStations.map(station => (
-            <option key={station.id} value={station.id}>
+            <option key={getStationKey(station)} value={getStationKey(station)}>
               {station.name} ({station.line})
             </option>
           ))}
         </select>
       </div>
 
-      <div style={{ marginBottom: '10px' }}>
-        <label style={{ fontSize: '12px', fontWeight: 'bold', display: 'block', marginBottom: '3px' }}>
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '6px', color: '#555' }}>
           To (Destination):
         </label>
         <select 
-          value={destinationStation?.id || ''} 
+          value={destinationKey} 
           onChange={(e) => {
-            const station = allStations.find(s => s.id === parseInt(e.target.value));
+            const station = findStationByKey(allStations, e.target.value);
             onDestinationChange(station);
           }}
           style={{ 
-            fontSize: '11px', 
-            padding: '4px 6px',
-            border: '1px solid #ccc',
-            borderRadius: '3px',
-            width: '100%'
+            fontSize: '13px', 
+            padding: '8px 10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            width: '100%',
+            backgroundColor: '#fff',
+            cursor: 'pointer',
+            transition: 'border-color 0.2s',
           }}
+          onFocus={(e) => e.target.style.borderColor = '#0066CC'}
+          onBlur={(e) => e.target.style.borderColor = '#ddd'}
         >
           <option value="">Select Destination Station</option>
           {allStations.map(station => (
-            <option key={station.id} value={station.id}>
+            <option key={getStationKey(station)} value={getStationKey(station)}>
               {station.name} ({station.line})
             </option>
           ))}
@@ -425,29 +446,47 @@ function StationSelector({ allStations, sourceStation, destinationStation, onSou
         onClick={onGetRoute}
         disabled={!sourceStation || !destinationStation}
         style={{
-          fontSize: '11px',
-          padding: '6px 12px',
+          fontSize: '14px',
+          padding: '10px 16px',
           backgroundColor: sourceStation && destinationStation ? '#0066CC' : '#ccc',
           color: 'white',
           border: 'none',
-          borderRadius: '3px',
+          borderRadius: '6px',
           cursor: sourceStation && destinationStation ? 'pointer' : 'not-allowed',
-          width: '100%'
+          width: '100%',
+          fontWeight: '600',
+          transition: 'background-color 0.2s',
+          boxShadow: sourceStation && destinationStation ? '0 2px 4px rgba(0,102,204,0.3)' : 'none',
+        }}
+        onMouseEnter={(e) => {
+          if (sourceStation && destinationStation) {
+            e.target.style.backgroundColor = '#0052a3';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (sourceStation && destinationStation) {
+            e.target.style.backgroundColor = '#0066CC';
+          }
         }}
       >
-        Get Route Information
+        Get Route
       </button>
 
       {sourceStation && destinationStation && (
         <div style={{ 
-          marginTop: '10px', 
-          padding: '8px', 
+          marginTop: '15px', 
+          padding: '12px', 
           backgroundColor: '#f0f8ff', 
-          borderRadius: '3px',
-          fontSize: '10px'
+          borderRadius: '6px',
+          fontSize: '12px',
+          border: '1px solid #b3d9ff'
         }}>
-          <div><strong>Source:</strong> {sourceStation.name} ({sourceStation.line})</div>
-          <div><strong>Destination:</strong> {destinationStation.name} ({destinationStation.line})</div>
+          <div style={{ marginBottom: '6px' }}>
+            <strong style={{ color: '#0066CC' }}>From:</strong> {sourceStation.name} ({sourceStation.line})
+          </div>
+          <div>
+            <strong style={{ color: '#0066CC' }}>To:</strong> {destinationStation.name} ({destinationStation.line})
+          </div>
         </div>
       )}
     </div>
@@ -455,12 +494,15 @@ function StationSelector({ allStations, sourceStation, destinationStation, onSou
 }
 
 function MumbaiMap() {
-  const [selectedTileStyle, setSelectedTileStyle] = React.useState('cartoVoyagerNoLabels');
+  const [isDarkTheme, setIsDarkTheme] = React.useState(false);
   const [sourceStation, setSourceStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const [selectionMode, setSelectionMode] = useState(null); // 'source' or 'destination'
   const [routePath, setRoutePath] = useState([]); // array of station objects in order
   const [interchanges, setInterchanges] = useState([]); // array of {atStation, fromLine, toLine}
+  
+  // Determine tile style based on theme
+  const selectedTileStyle = isDarkTheme ? 'cartoDark' : 'cartoVoyagerNoLabels';
 
   // Combine all stations from all lines
   const allStations = transitLines.flatMap(l => l.stations);
@@ -528,33 +570,34 @@ function MumbaiMap() {
     <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
       {/* Map Title */}
       <div className="map-title">
-        Mumbai Transit Map
+        Commute
       </div>
       
+      {/* Station Selector Card */}
+      <div className="station-selector-container">
+        <StationSelector
+          allStations={allStations}
+          sourceStation={sourceStation}
+          destinationStation={destinationStation}
+          onSourceChange={setSourceStation}
+          onDestinationChange={setDestinationStation}
+          onGetRoute={handleGetRoute}
+        />
+      </div>
+      
+      {/* Theme Toggle Button */}
+      <div className="theme-toggle-container">
+        <button 
+          onClick={() => setIsDarkTheme(!isDarkTheme)}
+          className="theme-toggle-button"
+          title={isDarkTheme ? 'Switch to Colored Theme' : 'Switch to Dark Theme'}
+        >
+          {isDarkTheme ? '☀️' : '🌙'}
+        </button>
+      </div>
+
       {/* Map Controls */}
       <div className="map-controls">
-        <div>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '5px' }}>
-            Map Style:
-          </div>
-          <select 
-            value={selectedTileStyle} 
-            onChange={(e) => setSelectedTileStyle(e.target.value)}
-            style={{ 
-              fontSize: '11px', 
-              padding: '2px 4px',
-              border: '1px solid #ccc',
-              borderRadius: '3px',
-              width: '100%'
-            }}
-          >
-            <option value="cartoVoyagerNoLabels">Colored (No Labels)</option>
-            <option value="cartoLightNoLabels">Light (No Labels)</option>
-            <option value="cartoLight">Light with Labels</option>
-            <option value="cartoDark">Dark Theme</option>
-            <option value="stamenToner">Minimal Black & White</option>
-          </select>
-        </div>
         <div style={{ marginTop: '10px' }}>
           <button 
             onClick={clearRoute}
@@ -575,7 +618,7 @@ function MumbaiMap() {
       </div>
 
       {/* Transit Legend */}
-      <div className="metro-legend">
+      {/* <div className="metro-legend">
         <div style={{ fontWeight: 'bold', marginBottom: '10px', fontSize: '14px' }}>
           Mumbai Transit
         </div>
@@ -588,7 +631,7 @@ function MumbaiMap() {
             <span>{line.label}</span>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Leaflet Map */}
       <MapContainer
@@ -596,12 +639,14 @@ function MumbaiMap() {
         zoom={11}
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={true}
-        zoomControl={true}
+        zoomControl={false}
       >
         <TileLayer
           attribution={mapTileOptions[selectedTileStyle].attribution}
           url={mapTileOptions[selectedTileStyle].url}
         />
+        
+        <ZoomControl position="bottomright" />
         
         {/* Lines: only show when no route, or show only segments along route */}
         {!routePath.length && (

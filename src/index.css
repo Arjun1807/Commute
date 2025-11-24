@@ -18,17 +18,57 @@ code {
   width: 100%;
 }
 
-/* Ensure zoom controls have proper spacing */
+/* Position zoom controls at bottom right */
+.leaflet-top.leaflet-right {
+  top: auto !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  left: auto !important;
+}
+
 .leaflet-control-zoom {
-  margin-top: 10px !important;
-  margin-right: 10px !important;
+  margin: 0 !important;
+}
+
+/* Theme toggle button */
+.theme-toggle-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.theme-toggle-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.theme-toggle-button:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.theme-toggle-button:active {
+  transform: scale(0.95);
 }
 
 /* Custom map controls */
 .map-controls {
   position: absolute;
-  top: 10px;
-  right: 60px; /* Move left to avoid zoom controls */
+  top: 60px;
+  right: 10px;
   z-index: 1000;
   background: white;
   padding: 10px;
@@ -37,10 +77,26 @@ code {
   max-width: 250px;
 }
 
-/* Station selector styles */
-.station-selector {
-  margin-bottom: 15px;
+/* Station selector card styles */
+.station-selector-container {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  z-index: 1000;
+  max-width: 320px;
 }
+
+.station-selector-card {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+
 
 /* Metro station icon styles */
 .metro-station-icon {
@@ -103,16 +159,37 @@ code {
 }
 
 .map-title {
+
   position: absolute;
   top: 10px;
   left: 10px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.9);
+  /* background: rgba(255, 255, 255, 0.9); */
+  background: linear-gradient(
+  135deg,
+  #000000 0%,      /* black */
+  #00008B 10%,     /* darkblue */
+  #0066CC 20%,     /* blue */
+  #00C9C9 30%,     /* turquoise */
+  #00CC00 40%,     /* green */
+  #FFCC00 50%,     /* yellow */
+  #FF6600 60%,     /* orange */
+  #CC0000 70%,     /* red */
+  #6600CC 80%,     /* purple */
+  #8B4513 90%      /* brown */
+);
+
   padding: 10px 15px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   font-weight: bold;
   font-size: 18px;
-  color: #333;
+  color: white;
   max-width: 300px;
 }
+
+
+
+
+
+
