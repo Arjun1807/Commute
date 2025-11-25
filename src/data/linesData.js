@@ -149,25 +149,29 @@ export const centralRailwayStations = [
 export const centralLineCoordinates = centralRailwayStations.map(station => station.coordinates);
 
 // Split Central Line into main line and branches
+const cloneWithLine = (station, lineLabel) => ({ ...station, line: lineLabel });
+const cloneArrayWithLine = (stations, lineLabel) => stations.map((st) => cloneWithLine(st, lineLabel));
+
+const kalyanStation = centralRailwayStations.find((s) => s.id === 26);
+const karjatBranchStations = centralRailwayStations.filter((station) => station.id >= 27 && station.id <= 37);
+const kasaraBranchStations = centralRailwayStations.filter((station) => station.id >= 38 && station.id <= 48);
+
 // Main Central Line: CSMT to Kalyan Junction
-export const centralRailwayMainStations = centralRailwayStations.filter(
-  station => station.id <= 26
+export const centralRailwayMainStations = cloneArrayWithLine(
+  centralRailwayStations.filter((station) => station.id <= 26),
+  'Central Line'
 );
 
-// Karjat Branch: Kalyan Junction to Khopoli
+// Karjat Branch: Kalyan Junction to Khopoli (unique line label)
 export const centralRailwayKarjatBranchStations = [
-  centralRailwayStations.find(s => s.id === 26), // Kalyan Junction
-  ...centralRailwayStations.filter(
-    station => station.id >= 27 && station.id <= 37
-  )
+  cloneWithLine(kalyanStation, 'Central Line (Karjat Branch)'),
+  ...cloneArrayWithLine(karjatBranchStations, 'Central Line (Karjat Branch)'),
 ];
 
-// Kasara Branch: Kalyan Junction to Kasara
+// Kasara Branch: Kalyan Junction to Kasara (unique line label)
 export const centralRailwayKasaraBranchStations = [
-  centralRailwayStations.find(s => s.id === 26), // Kalyan Junction
-  ...centralRailwayStations.filter(
-    station => station.id >= 38 && station.id <= 48
-  )
+  cloneWithLine(kalyanStation, 'Central Line (Kasara Branch)'),
+  ...cloneArrayWithLine(kasaraBranchStations, 'Central Line (Kasara Branch)'),
 ];
 
 
@@ -200,7 +204,15 @@ export const westernRailwayStations = [
   { id: 26, name: "Naigaon (Western Line)", coordinates: [19.351211505987408, 72.84621650944011], line: "Western Line" },
   { id: 27, name: "Vasai Road", coordinates: [19.38259676224325, 72.83191299919308], line: "Western Line" },
   { id: 28, name: "Nallasopara", coordinates: [19.417655100600044, 72.81888106999534], line: "Western Line" },
-  { id: 29, name: "Virar", coordinates: [19.454746074655404, 72.81193085090473], line: "Western Line" }
+  { id: 29, name: "Virar", coordinates: [19.454746074655404, 72.81193085090473], line: "Western Line" },
+  { id: 30, name: "Vaitarna", coordinates: [19.508611, 72.848889], line: "Western Line" },
+  { id: 31, name: "Saphale", coordinates: [19.577222, 72.824167], line: "Western Line" },
+  { id: 32, name: "Kelva Road", coordinates: [19.633889, 72.793333], line: "Western Line" },
+  { id: 33, name: "Palghar", coordinates: [19.696389, 72.764444], line: "Western Line" },
+  { id: 34, name: "Umroli Road", coordinates: [19.748333, 72.748333], line: "Western Line" },
+  { id: 35, name: "Boisar", coordinates: [19.799722, 72.758333], line: "Western Line" },
+  { id: 36, name: "Vangaon", coordinates: [19.873333, 72.762222], line: "Western Line" },
+  { id: 37, name: "Dahanu Road", coordinates: [19.972222, 72.730556], line: "Western Line" }
 ];
 
 export const westernLineCoordinates = westernRailwayStations.map(station => station.coordinates);

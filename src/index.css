@@ -30,15 +30,19 @@ code {
   margin: 0 !important;
 }
 
-/* Theme toggle button */
-.theme-toggle-container {
+/* Floating action buttons (theme + clear) */
+.map-action-buttons {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.theme-toggle-button {
+.theme-toggle-button,
+.clear-route-button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -54,27 +58,66 @@ code {
   backdrop-filter: blur(10px);
 }
 
-.theme-toggle-button:hover {
+.theme-toggle-button:hover,
+.clear-route-button:hover {
   background: rgba(255, 255, 255, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transform: scale(1.05);
 }
 
-.theme-toggle-button:active {
+.theme-toggle-button:active,
+.clear-route-button:active {
   transform: scale(0.95);
 }
 
-/* Custom map controls */
-.map-controls {
+.clear-route-button {
+  border: 2px solid rgba(244, 67, 54, 0.8);
+  color: #f44336;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.route-summary-card {
   position: absolute;
   top: 60px;
   right: 10px;
   z-index: 1000;
-  background: white;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  max-width: 250px;
+  width: 260px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  font-size: 12px;
+  color: #333;
+}
+
+.route-summary-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #0066cc;
+}
+
+.route-summary-section {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.route-summary-section ol {
+  padding-left: 18px;
+  margin: 6px 0 0 0;
+}
+
+.route-summary-section li {
+  margin-bottom: 4px;
+}
+
+.route-summary-error {
+  color: #d32f2f;
+  margin: 0;
+  font-weight: 600;
 }
 
 /* Station selector card styles */

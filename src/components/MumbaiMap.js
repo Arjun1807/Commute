@@ -500,6 +500,7 @@ function MumbaiMap() {
   const [selectionMode, setSelectionMode] = useState(null); // 'source' or 'destination'
   const [routePath, setRoutePath] = useState([]); // array of station objects in order
   const [interchanges, setInterchanges] = useState([]); // array of {atStation, fromLine, toLine}
+  const [routeSummary, setRouteSummary] = useState(null);
   
   // Determine tile style based on theme
   const selectedTileStyle = isDarkTheme ? 'cartoDark' : 'cartoVoyagerNoLabels';
@@ -536,24 +537,22 @@ function MumbaiMap() {
     if (!fromStation || !toStation) return;
     const result = runDijkstra(fromStation, toStation);
     if (result.stations.length === 0) {
-      alert('No route found between selected stations.');
       setRoutePath([]);
       setInterchanges([]);
+      setRouteSummary({
+        error: `No route found between ${fromStation.name} and ${toStation.name}.`,
+      });
       return;
     }
 
     setRoutePath(result.stations);
     setInterchanges(result.interchanges);
-
-    let summary = `Route from ${fromStation.name} to ${toStation.name}\n`;
-    summary += `Total time: ${result.totalTime} minutes\n`;
-    if (result.interchanges.length > 0) {
-      summary += `Interchanges (${result.interchanges.length}):\n`;
-      result.interchanges.forEach((chg, idx) => {
-        summary += `${idx + 1}. At ${chg.atStation}: ${chg.fromLine} -> ${chg.toLine}\n`;
-      });
-    }
-    alert(summary);
+    setRouteSummary({
+      from: fromStation,
+      to: toStation,
+      totalTime: result.totalTime,
+      interchanges: result.interchanges,
+    });
   };
 
   // Backwards compatibility button (unused after popup buttons)
@@ -564,6 +563,7 @@ function MumbaiMap() {
   const clearRoute = () => {
     setRoutePath([]);
     setInterchanges([]);
+    setRouteSummary(null);
   };
 
   return (
@@ -585,8 +585,15 @@ function MumbaiMap() {
         />
       </div>
       
-      {/* Theme Toggle Button */}
-      <div className="theme-toggle-container">
+      {/* Floating Action Buttons */}
+      <div className="map-action-buttons">
+        <button
+          onClick={clearRoute}
+          className="clear-route-button"
+          title="Clear Route"
+        >
+          🗑️
+        </button>
         <button 
           onClick={() => setIsDarkTheme(!isDarkTheme)}
           className="theme-toggle-button"
@@ -596,26 +603,46 @@ function MumbaiMap() {
         </button>
       </div>
 
-      {/* Map Controls */}
-      <div className="map-controls">
-        <div style={{ marginTop: '10px' }}>
-          <button 
-            onClick={clearRoute}
-            style={{
-              fontSize: '10px',
-              padding: '4px 8px',
-              backgroundColor: '#f44336',
-              color: 'white',
-              border: '1px solid #c62828',
-              borderRadius: '3px',
-              cursor: 'pointer',
-              width: '100%'
-            }}
-          >
-            Clear Route
-          </button>
+      {/* Route Summary Card */}
+      {routeSummary && (
+        <div className="route-summary-card">
+          {routeSummary.error ? (
+            <div>
+              <div className="route-summary-title">Route Info</div>
+              <p className="route-summary-error">{routeSummary.error}</p>
+            </div>
+          ) : (
+            <>
+              <div className="route-summary-title">Route Summary</div>
+              <div className="route-summary-section">
+                <strong>From:</strong> {routeSummary.from.name} ({routeSummary.from.line})
+              </div>
+              <div className="route-summary-section">
+                <strong>To:</strong> {routeSummary.to.name} ({routeSummary.to.line})
+              </div>
+              <div className="route-summary-section">
+                <strong>Total Time:</strong> {routeSummary.totalTime} minutes
+              </div>
+              {routeSummary.interchanges.length > 0 ? (
+                <div className="route-summary-section">
+                  <strong>Interchanges:</strong>
+                  <ol>
+                    {routeSummary.interchanges.map((chg, idx) => (
+                      <li key={`chg-${idx}`}>
+                        At {chg.atStation}: {chg.fromLine} → {chg.toLine}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ) : (
+                <div className="route-summary-section">
+                  <strong>Interchanges:</strong> None
+                </div>
+              )}
+            </>
+          )}
         </div>
-      </div>
+      )}
 
       {/* Transit Legend */}
       {/* <div className="metro-legend">
